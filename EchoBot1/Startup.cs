@@ -3,11 +3,13 @@
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio EchoBot v4.18.1
 
+using EchoBot1.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Bot.Connector.Authentication;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,6 +31,11 @@ namespace EchoBot1
             services.AddHttpClient().AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.MaxDepth = HttpHelper.BotMessageSerializerSettings.MaxDepth;
+            });
+
+            services.AddDbContext<AppDbContext>(options => {
+                string connectionString = Configuration.GetConnectionString("DefaultConnection");
+                options.UseSqlServer(connectionString);
             });
 
             // Create the Bot Framework Authentication to be used with the Bot Adapter.
